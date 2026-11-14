@@ -1,0 +1,36 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - CLIPFORGE_SECRET=${CLIPFORGE_SECRET}
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      - ASR_PROVIDER=${ASR_PROVIDER:-local-vosk}
+      - OPENAI_API_KEY=${OPENAI_API_KEY:-}
+      - DEEPGRAM_API_KEY=${DEEPGRAM_API_KEY:-}
+      - DATA_DIR=/data
+      - HOST=0.0.0.0
+    ports:
+      - '8787:8787'
+    volumes:
+      - clipforge-data:/data
+    depends_on:
+      - worker
+    restart: unless-stopped
+
+  worker:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    command: ['node', 'src/worker/index.js']
+    environment:
+      - CLIPFORGE_SECRET=${CLIPFORGE_SECRET}
+      - DATA_DIR=/data
+    volumes:
+      - clipforge-data:/data
+    restart: unless-stopped
+
+volumes:
+  clipforge-data:

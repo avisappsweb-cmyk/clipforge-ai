@@ -1,0 +1,13 @@
+{
+  "name": "clipforge",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "setup": "cd server && npm install && npm run setup:models && cd ../web && npm install",
+    "dev:api": "cd server && node src/index.js",
+    "dev:worker": "cd server && node src/worker/index.js",
+    "dev:web": "cd web && npm run dev",
+    "build": "cd web && npm run build",
+    "test:e2e": "cd server && npm run test:e2e"
+  }
+}
